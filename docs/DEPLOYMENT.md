@@ -8,12 +8,27 @@ This document describes how to deploy the multi-turn, LLM-driven restaurant rese
 - OpenAI API key (for GPT-4.1-mini)
 - Publicly accessible server or tunneling tool (e.g., ngrok) for the webhook
 
-## 2. Install Dependencies
+## 2. Set Up Virtual Environment
+```bash
+# Create a virtual environment
+python -m venv venv
+
+# Activate the virtual environment
+# On macOS/Linux:
+source venv/bin/activate
+# On Windows:
+# .\venv\Scripts\activate
+
+# Verify you're in the virtual environment
+which python  # Should point to the venv directory
+```
+
+## 3. Install Dependencies
 ```bash
 pip install -r requirements.txt
 ```
 
-## 3. Set Environment Variables
+## 4. Set Environment Variables
 Create a `.env` file or set these variables in your environment:
 ```
 TWILIO_ACCOUNT_SID=your_twilio_sid
@@ -23,7 +38,7 @@ OPENAI_API_KEY=your_openai_api_key
 WEBHOOK_URL=https://<your-public-domain-or-ngrok>/twilio_webhook
 ```
 
-## 4. Run the Webhook Server
+## 5. Run the Webhook Server
 The webhook server handles the live conversation loop with the restaurant.
 ```bash
 python webhook_server.py
@@ -34,21 +49,21 @@ ngrok http 5000
 ```
 Copy the HTTPS URL from ngrok and set it as `WEBHOOK_URL`.
 
-## 5. Configure Twilio
+## 6. Configure Twilio
 - Ensure your Twilio number has voice capability.
 - When placing calls from the app, the webhook URL will be used as the TwiML callback.
 
-## 6. Run the Streamlit App
+## 7. Run the Streamlit App
 ```bash
 streamlit run app.py
 ```
 
-## 7. Usage
+## 8. Usage
 - Enter reservation details in the Streamlit UI and submit.
 - The app will place a call to the restaurant and the LLM will converse until a reservation is confirmed or declined.
 - The full conversation will be displayed in the UI after the call.
 
-## 8. Notes
+## 9. Notes
 - For production, deploy the webhook server on a cloud VM or serverless platform with HTTPS.
 - Conversation state is stored in memory—if the server restarts, active calls will lose context.
 - For advanced logging or persistence, extend `conversation_manager.py`.
