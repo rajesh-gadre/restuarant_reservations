@@ -1,3 +1,6 @@
+from dotenv import load_dotenv
+load_dotenv()
+
 import streamlit as st
 from twilio.rest import Client
 import openai
@@ -16,9 +19,9 @@ TWILIO_ACCOUNT_SID = os.getenv("TWILIO_ACCOUNT_SID")
 TWILIO_AUTH_TOKEN = os.getenv("TWILIO_AUTH_TOKEN")
 TWILIO_FROM_NUMBER = os.getenv("TWILIO_FROM_NUMBER")
 
-OPENAI_API_KEY = st.secrets["openai_api_key"] if "openai_api_key" in st.secrets else os.getenv("OPENAI_API_KEY")
+OPENAI_API_KEY = os.getenv("OPENAI_API_KEY")
 if not (TWILIO_ACCOUNT_SID and TWILIO_AUTH_TOKEN and TWILIO_FROM_NUMBER and OPENAI_API_KEY):
-    st.warning("Please set your Twilio credentials as environment variables: TWILIO_ACCOUNT_SID, TWILIO_AUTH_TOKEN, TWILIO_FROM_NUMBER, and OPENAI_API_KEY (or add openai_api_key to Streamlit secrets).")
+    st.warning("Please set your Twilio credentials as environment variables: TWILIO_ACCOUNT_SID, TWILIO_AUTH_TOKEN, TWILIO_FROM_NUMBER, and OPENAI_API_KEY.")
     st.stop()
 openai.api_key = OPENAI_API_KEY
 
