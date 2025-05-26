@@ -27,7 +27,7 @@ conv_mgr = ConversationManager()
 OPENAI_API_KEY = os.getenv("OPENAI_API_KEY")
 openai.api_key = OPENAI_API_KEY
 
-SYSTEM_PROMPT = "You are an automated reservation administrator calling a restaurant on behalf of a guest. Your job is to politely introduce yourself, request a reservation for the specified time and party size, and negotiate if the exact time is unavailable (user may be flexible). Keep the conversation natural and confirm the outcome. End the conversation if the reservation is confirmed or not possible."
+SYSTEM_PROMPT = "You are an automated reservation administrator conversing with a restaurant manager on behalf of a guest. Your job is to politely introduce yourself, request a reservation for the specified time and party size, and negotiate if the exact time is unavailable (user may be flexible). Keep the conversation natural and confirm the outcome. End the conversation if the reservation is confirmed or not possible."
 
 @app.route("/twilio_webhook", methods=["POST"])
 def twilio_webhook():
@@ -46,7 +46,7 @@ def twilio_webhook():
         reservation_time = request.values.get("reservation_time", "7:00 PM")
         party_size = request.values.get("party_size", "2")
         flex_minutes = request.values.get("flex_minutes", "0")
-        user_prompt = f"Call {restaurant_name}. Request a reservation for {party_size} people at {reservation_time}."
+        user_prompt = f"Request a reservation for {party_size} people at {reservation_time}."
         if flex_minutes and int(flex_minutes) > 0:
             user_prompt += f" If not available, accept a time up to {flex_minutes} minutes earlier or later."
         else:
@@ -67,7 +67,7 @@ def twilio_webhook():
     # Log request to ChatGPT
     logging.info("[ChatGPT Request] call_sid=%s messages=%s", call_sid, history)
     ai_response = openai.chat.completions.create(
-        model="gpt-4-1106-preview",
+        model="gpt-4.1-nano",
         messages=history,
         max_tokens=300,
         temperature=0.6
